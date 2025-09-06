@@ -1,0 +1,6 @@
+{
+    "commitUrlFormat": "{{host}}/theater-improrama/html2pdf-server/commit/{{hash}}",
+    "compareUrlFormat": "{{host}}/theater-improrama/html2pdf-server/compare/{{previousTag}}...{{currentTag}}",
+    "issueUrlFormat": "{{host}}/theater-improrama/html2pdf-server/issues/{{id}}",
+    "userUrlFormat": "{{host}}/{{user}}"
+}

@@ -1,0 +1,38 @@
+name: "Release"
+run-name: "Release"
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  build:
+    name: Build images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout repository
+
+      - name: Login to Docker registry
+        run: echo "${{ secrets.REGISTRY_CREDENTIALS }}" | base64 -d | docker login --password-stdin -u "${{ vars.REGISTRY_USER }}" "${{ vars.REGISTRY_URL }}"
+
+      - name: Build Docker image
+        run: docker build -f ./Dockerfile . -t ${{ vars.IMAGE }}:${{ github.ref_name }}
+      
+      - name: Push Docker image
+        run: docker push ${{ vars.IMAGE }}:${{ github.ref_name }}
+
+      - name: Logout from Docker registry
+        run: docker logout ${{ vars.REGISTRY_URL }}
+  create-release:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: softprops/action-gh-release@v2
+        name: Create GitHub Release
+        with:
+          body: |
+            Container images created for this release:
+              * `${{ vars.IMAGE }}:${{ github.ref_name }}` (staging frontend)
+          tag_name: ${{ github.ref_name }}
