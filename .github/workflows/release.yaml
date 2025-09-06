@@ -18,8 +18,14 @@ jobs:
       - name: Build Docker image
         run: docker build -f ./Dockerfile . -t ${{ vars.IMAGE }}:${{ github.ref_name }}
       
-      - name: Push Docker image
+      - name: Tag Docker image
+        run: docker tag ${{ vars.IMAGE }}:${{ github.ref_name }} ${{ vars.IMAGE }}:latest
+      
+      - name: Push versioned Docker image
         run: docker push ${{ vars.IMAGE }}:${{ github.ref_name }}
+      
+      - name: Push latest Docker image
+        run: docker push ${{ vars.IMAGE }}:latest
 
       - name: Logout from Docker registry
         run: docker logout
