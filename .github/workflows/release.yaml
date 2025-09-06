@@ -34,5 +34,5 @@ jobs:
         with:
           body: |
             Container images created for this release:
-              * `${{ vars.IMAGE }}:${{ github.ref_name }}` (staging frontend)
+              * `${{ vars.IMAGE }}:${{ github.ref_name }}`
           tag_name: ${{ github.ref_name }}
