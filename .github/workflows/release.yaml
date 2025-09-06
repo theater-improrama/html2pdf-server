@@ -13,7 +13,7 @@ jobs:
         name: Checkout repository
 
       - name: Login to Docker registry
-        run: echo "${{ secrets.REGISTRY_CREDENTIALS }}" | docker login --password-stdin -u "${{ vars.REGISTRY_USER }}" "${{ vars.REGISTRY_URL }}"
+        run: echo "${{ secrets.REGISTRY_CREDENTIALS }}" | docker login --password-stdin -u "${{ vars.REGISTRY_USER }}"
 
       - name: Build Docker image
         run: docker build -f ./Dockerfile . -t ${{ vars.IMAGE }}:${{ github.ref_name }}
@@ -22,7 +22,7 @@ jobs:
         run: docker push ${{ vars.IMAGE }}:${{ github.ref_name }}
 
       - name: Logout from Docker registry
-        run: docker logout ${{ vars.REGISTRY_URL }}
+        run: docker logout
   create-release:
     name: Create release
     runs-on: ubuntu-latest
